@@ -619,8 +619,8 @@ class BehatHTMLFormatter implements Formatter {
       }
 
       else {
-          $this->failedUnCountScenarios = $this->currentScenario;
-          $this->failedUncountedTestcases = $this->currentTestcase;
+          $this->failedUnCountScenarios[] = $this->currentScenario;
+          $this->failedUncountedTestcases[] = $this->currentTestcase;
 
       }
 
