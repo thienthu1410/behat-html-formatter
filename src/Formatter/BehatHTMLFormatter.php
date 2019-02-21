@@ -666,7 +666,7 @@ class BehatHTMLFormatter implements Formatter {
       $backgroundSteps = 0;
       $hasBacground = $event->getFeature()->getBackground();
       if (isset($hasBacground)){
-         $backgroundSteps = $hasBacground->getSteps();
+         $backgroundSteps = sizeof($hasBacground->getSteps());
       }
       $this->totalSteps = sizeof($event->getOutline()->getSteps()) + $backgroundSteps;
       $this->currentScenarios = [];
