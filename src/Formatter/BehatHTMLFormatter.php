@@ -663,7 +663,12 @@ class BehatHTMLFormatter implements Formatter {
       $print = $this->renderer->renderBeforeTestcase($this);
       $this->printer->writeln($print);
 
-      $this->totalSteps = sizeof($event->getOutline()->getSteps());
+      $backgroundSteps = 0;
+      $hasBacground = $event->getFeature()->getBackground();
+      if (isset($hasBacground)){
+         $backgroundSteps = $hasBacground->getSteps();
+      }
+      $this->totalSteps = sizeof($event->getOutline()->getSteps()) + $backgroundSteps;
       $this->currentScenarios = [];
       $totalExamples = $event->getOutline()->getExamples();
       foreach ($totalExamples as $example){
