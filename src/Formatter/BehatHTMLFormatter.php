@@ -160,7 +160,7 @@ class BehatHTMLFormatter implements Formatter {
   /**
    * @var Scenario[]
    */
-  private $failedUnCountScenarios = [];
+  private $failedUnCountedScenarios = [];
 
   /**
    * @var Scenario[]
@@ -413,7 +413,7 @@ class BehatHTMLFormatter implements Formatter {
   }
 
   public function getFailedUncountedScenarios() {
-      return $this->failedUnCountScenarios;
+      return $this->failedUnCountedScenarios;
   }
 
   public function getPassedUncountedScenarios() {
@@ -619,7 +619,7 @@ class BehatHTMLFormatter implements Formatter {
       }
 
       else {
-          $this->failedUnCountScenarios[] = $this->currentScenario;
+          $this->failedUnCountedScenarios[] = $this->currentScenario;
           $this->failedUncountedTestcases[] = $this->currentTestcase;
 
       }
