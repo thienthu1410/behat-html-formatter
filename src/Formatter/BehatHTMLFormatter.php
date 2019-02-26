@@ -219,6 +219,11 @@ class BehatHTMLFormatter implements Formatter {
    * @var Step[]
    */
   private $skippedSteps;
+
+  /**
+   * @var int
+   */
+  private $backgroundSteps = 0;
   //</editor-fold>
 
   //<editor-fold desc="Formatter functions">
@@ -514,6 +519,11 @@ class BehatHTMLFormatter implements Formatter {
    * @param BeforeFeatureTested $event
    */
   public function onBeforeFeatureTested(BeforeFeatureTested $event) {
+    $hasBacground = $event->getFeature()->getBackground();
+    if (isset($hasBacground)){
+        $this->backgroundSteps = sizeof($hasBacground->getSteps());
+    }
+
     $feature = new Feature();
     $feature->setId($this->featureCounter);
     $this->featureCounter++;
@@ -532,11 +542,12 @@ class BehatHTMLFormatter implements Formatter {
    */
   public function onAfterFeatureTested(AfterFeatureTested $event) {
     $this->currentSuite->addFeature($this->currentFeature);
-    if ($this->currentFeature->allPassed()) {
-      $this->passedFeatures[] = $this->currentFeature;
-    }
-    else {
-      $this->failedFeatures[] = $this->currentFeature;
+    if ($this->currentFeature->getFailedTestcases() + $this->currentFeature->getPercentPassed() > 0) {
+            if ($this->currentFeature->allPassed()) {
+                $this->passedFeatures[] = $this->currentFeature;
+            } else {
+                $this->failedFeatures[] = $this->currentFeature;
+            }
     }
 
     $print = $this->renderer->renderAfterFeature($this);
@@ -663,12 +674,7 @@ class BehatHTMLFormatter implements Formatter {
       $print = $this->renderer->renderBeforeTestcase($this);
       $this->printer->writeln($print);
 
-      $backgroundSteps = 0;
-      $hasBacground = $event->getFeature()->getBackground();
-      if (isset($hasBacground)){
-         $backgroundSteps = sizeof($hasBacground->getSteps());
-      }
-      $this->totalSteps = sizeof($event->getOutline()->getSteps()) + $backgroundSteps;
+      $this->totalSteps = sizeof($event->getOutline()->getSteps()) + $this->backgroundSteps;
       $this->currentScenarios = [];
       $totalExamples = $event->getOutline()->getExamples();
       foreach ($totalExamples as $example){
