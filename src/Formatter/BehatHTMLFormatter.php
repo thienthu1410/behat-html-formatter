@@ -519,6 +519,7 @@ class BehatHTMLFormatter implements Formatter {
    * @param BeforeFeatureTested $event
    */
   public function onBeforeFeatureTested(BeforeFeatureTested $event) {
+    $this->backgroundSteps  = 0;
     $hasBacground = $event->getFeature()->getBackground();
     if (isset($hasBacground)){
         $this->backgroundSteps = sizeof($hasBacground->getSteps());
